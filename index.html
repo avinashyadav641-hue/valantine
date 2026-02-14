@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For Sonu</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Poppins:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #1a0a0e;
+            font-family: "Poppins", sans-serif;
+            color: #e8d5d0;
+            overflow-x: hidden;
+        }
+
+        /* ── Ambient floating particles ── */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: var(--max-opacity, 0.15);
+            }
+
+            85% {
+                opacity: var(--max-opacity, 0.15);
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(40px);
+                opacity: 0;
+            }
+        }
+
+        /* ── Opening Section ── */
+        #opening {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        #opening.fade-out {
+            opacity: 0;
+            transform: translateY(-30px);
+            pointer-events: none;
+        }
+
+        .card {
+            width: min(90%, 440px);
+            padding: 50px 34px 55px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 24px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow:
+                0 40px 80px rgba(0, 0, 0, 0.4),
+                0 0 120px rgba(180, 60, 80, 0.08);
+            animation: cardIn 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .card h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: #f0d4cc;
+            line-height: 1.55;
+            margin-bottom: 10px;
+        }
+
+        .card h1 span {
+            display: block;
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            font-size: 20px;
+            font-weight: 400;
+            color: #c9a49b;
+            margin-top: 8px;
+        }
+
+        .yes-btn {
+            display: inline-block;
+            margin-top: 36px;
+            padding: 14px 48px;
+            border-radius: 50px;
+            border: 1px solid rgba(200, 120, 120, 0.35);
+            background: linear-gradient(135deg, rgba(180, 70, 80, 0.25), rgba(140, 50, 60, 0.15));
+            color: #f0cfc8;
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(140, 40, 50, 0.2);
+            text-transform: uppercase;
+        }
+
+        .yes-btn:hover {
+            background: linear-gradient(135deg, rgba(180, 70, 80, 0.4), rgba(140, 50, 60, 0.3));
+            box-shadow: 0 12px 40px rgba(140, 40, 50, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .yes-btn:active {
+            transform: scale(0.97);
+        }
+
+        .hint {
+            margin-top: 24px;
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            font-size: 14px;
+            color: #8a6b65;
+        }
+
+        /* ── Post-Yes Experience ── */
+        #experience {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        #experience.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .section {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Transition Message ── */
+        .transition-message {
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            font-size: 22px;
+            color: #c9a49b;
+            text-align: center;
+            line-height: 1.7;
+            max-width: 380px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealSoft 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes revealSoft {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Memory Gallery ── */
+        .memories-title {
+            font-family: "Playfair Display", serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: #c9a49b;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: revealSoft 1s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .gallery-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 20px 24px 40px;
+            max-width: 100vw;
+            scrollbar-width: none;
+        }
+
+        .gallery-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .memory-card {
+            flex: 0 0 280px;
+            scroll-snap-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transform: rotate(var(--rotation, 0deg));
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .memory-card:nth-child(odd) {
+            --rotation: -1.5deg;
+        }
+
+        .memory-card:nth-child(even) {
+            --rotation: 1.5deg;
+        }
+
+        .memory-card:hover {
+            transform: rotate(0deg) translateY(-6px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .memory-card img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .memory-card .caption {
+            padding: 16px 18px;
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            font-size: 15px;
+            color: #b8948d;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* ── Distance Section ── */
+        .distance-section {
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .distance-number {
+            font-family: "Playfair Display", serif;
+            font-size: 64px;
+            font-weight: 600;
+            color: rgba(200, 130, 120, 0.15);
+            letter-spacing: 6px;
+            margin-bottom: 16px;
+        }
+
+        .distance-text {
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            font-size: 20px;
+            color: #c9a49b;
+            line-height: 1.7;
+            max-width: 340px;
+            margin: 0 auto;
+        }
+
+        .distance-subtext {
+            margin-top: 20px;
+            font-family: "Poppins", sans-serif;
+            font-size: 12px;
+            font-weight: 300;
+            color: #6b4f4a;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ── Closing Section ── */
+        .closing-section {
+            min-height: 70vh;
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .closing-message {
+            font-family: "Playfair Display", serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: #f0d4cc;
+            line-height: 1.6;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .heartbeat-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #b8645a;
+            margin-top: 40px;
+            animation: pulse 2.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(184, 100, 90, 0.4);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(184, 100, 90, 0.3);
+            }
+
+            50% {
+                transform: scale(1.4);
+                box-shadow: 0 0 40px rgba(184, 100, 90, 0.6);
+            }
+        }
+
+        .closing-name {
+            margin-top: 50px;
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            font-size: 16px;
+            color: #8a6b65;
+        }
+
+        /* ── Scroll-based fade-in ── */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            .card {
+                padding: 42px 26px 48px;
+            }
+
+            .card h1 {
+                font-size: 22px;
+            }
+
+            .card h1 span {
+                font-size: 17px;
+            }
+
+            .memory-card {
+                flex: 0 0 260px;
+            }
+
+            .memory-card img {
+                height: 280px;
+            }
+
+            .distance-number {
+                font-size: 48px;
+            }
+
+            .closing-message {
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .card h1 {
+                font-size: 30px;
+            }
+
+            .memory-card {
+                flex: 0 0 320px;
+            }
+
+            .memory-card img {
+                height: 380px;
+            }
+
+            .distance-number {
+                font-size: 80px;
+            }
+        }
+
+        /* ── Thin line divider ── */
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(200, 160, 150, 0.2);
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Opening ── -->
+    <section id="opening">
+        <div class="card">
+            <h1>
+                Three years, Sonu.
+                <span>And I'd choose every single day again.</span>
+            </h1>
+            <button class="yes-btn" id="yesBtn">Yes</button>
+            <p class="hint">Some love stories have only one answer.</p>
+        </div>
+    </section>
+
+    <!-- ── Post-Yes Experience ── -->
+    <div id="experience">
+
+        <!-- Transition -->
+        <section class="section">
+            <p class="transition-message">
+                You said yes three years ago.<br>
+                And every day since has been<br>
+                a quieter, deeper kind of yes.
+            </p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Memories -->
+        <section class="section fade-in-section">
+            <p class="memories-title">Us</p>
+            <div class="gallery-scroll">
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.21 PM.jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">Where it all started — a glance that never looked away.</div>
+                </div>
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.22 PM.jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">The quiet moments no one else sees.</div>
+                </div>
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.22 PM (1).jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">Laughing until the world forgot to watch.</div>
+                </div>
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.22 PM (2).jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">Your hand. My calm.</div>
+                </div>
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.23 PM.jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">We don't need perfect — we have us.</div>
+                </div>
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.23 PM (1).jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">Some days are photographs. This was one.</div>
+                </div>
+
+                <div class="memory-card">
+                    <img src="WhatsApp Image 2026-02-14 at 11.13.23 PM (2).jpeg" alt="Memory" loading="lazy" />
+                    <div class="caption">Still falling. Still choosing you.</div>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Distance -->
+        <section class="section distance-section fade-in-section">
+            <div class="distance-number">1200 km</div>
+            <p class="distance-text">
+                Between us — and not one of them matters.
+            </p>
+            <p class="distance-subtext">distance is just geography</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Closing -->
+        <section class="section closing-section fade-in-section">
+            <p class="closing-message">
+                I'm with you, Sonu.<br>
+                Wherever you are.
+            </p>
+            <div class="heartbeat-dot"></div>
+            <p class="closing-name">— Always yours</p>
+        </section>
+
+    </div>
+
+    <script>
+        // ── Ambient Particles ──
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+
+            const size = Math.random() * 4 + 2;
+            const maxOpacity = Math.random() * 0.12 + 0.04;
+            const hue = Math.random() > 0.5 ? '12, 80%, 70%' : '350, 50%, 65%';
+
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.background = `hsla(${hue}, ${maxOpacity})`;
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.bottom = '-10px';
+            particle.style.setProperty('--max-opacity', maxOpacity);
+            particle.style.animationDuration = (Math.random() * 8 + 10) + 's';
+
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 18000);
+        }
+
+        setInterval(createParticle, 1200);
+
+        // ── Yes Button Transition ──
+        const yesBtn = document.getElementById('yesBtn');
+        const opening = document.getElementById('opening');
+        const experience = document.getElementById('experience');
+
+        yesBtn.addEventListener('click', () => {
+            opening.classList.add('fade-out');
+
+            setTimeout(() => {
+                opening.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                experience.style.display = 'block';
+
+                requestAnimationFrame(() => {
+                    experience.classList.add('visible');
+                });
+            }, 800);
+        });
+
+        // ── Scroll Reveal ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+
+</body>
+
+</html>
